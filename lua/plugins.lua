@@ -42,4 +42,5 @@ use {
   requires = { 'kyazdani42/nvim-web-devicons', opt = true }
 }
 use 'folke/lsp-colors.nvim'
+use 'theHamsta/nvim-dap-virtual-text'
 end)

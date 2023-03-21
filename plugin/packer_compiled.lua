@@ -104,6 +104,11 @@ _G.packer_plugins = {
     path = "/home/aro/.local/share/nvim/site/pack/packer/start/cmp-vsnip",
     url = "https://github.com/hrsh7th/cmp-vsnip"
   },
+  ["dap-cpp"] = {
+    loaded = true,
+    path = "/home/aro/.local/share/nvim/site/pack/packer/start/dap-cpp",
+    url = "https://github.com/Vans.zhang/dap-cpp"
+  },
   ["dracula.nvim"] = {
     loaded = true,
     path = "/home/aro/.local/share/nvim/site/pack/packer/start/dracula.nvim",
@@ -149,6 +154,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/aro/.local/share/nvim/site/pack/packer/start/nvim-dap",
     url = "https://github.com/mfussenegger/nvim-dap"
+  },
+  ["nvim-dap-virtual-text"] = {
+    loaded = true,
+    path = "/home/aro/.local/share/nvim/site/pack/packer/start/nvim-dap-virtual-text",
+    url = "https://github.com/theHamsta/nvim-dap-virtual-text"
   },
   ["nvim-lspconfig"] = {
     loaded = true,
