@@ -329,6 +329,7 @@ vim.tabstop = 3
 vim.shiftwidth = 3
 vim.softtabstop = 3
 
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -414,7 +415,7 @@ local function format_and_back()
   vim.api.nvim_win_set_cursor(0, current_pos)
 end
 
-vim.keymap.set('n', '<F12>', format_and_back)
+vim.keymap.set('n', '<F12>', format_and_back, { noremap = true})
 
 vim.api.nvim_create_user_command('LiveGrepGitRoot', live_grep_git_root, {})
 
@@ -452,7 +453,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'html', 'htmldjango' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -581,7 +582,9 @@ require('which-key').register({
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
-require('mason-lspconfig').setup()
+require('mason-lspconfig').setup({
+  ensure_installed = {"jinja_lsp", "pylsp", "jinja_lsp", "html", "htmldjango", "clangd"}
+})
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -592,13 +595,11 @@ require('mason-lspconfig').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-  -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
+  -- pyright = {filetypes = {'py'}},
   -- rust_analyzer = {},
   -- tsserver = {},
   -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
