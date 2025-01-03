@@ -72,7 +72,8 @@ require('lazy').setup({
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
-
+  'nvim-tree/nvim-web-devicons',
+  'echasnovski/mini.nvim',
   -- Detect tabstop and shiftwidth automatically
   -- 'tpope/vim-sleuth',
 
@@ -81,11 +82,11 @@ require('lazy').setup({
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+
     dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
+      -- AutomatiCally install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
-
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
@@ -261,7 +262,6 @@ require('lazy').setup({
     },
     build = ':TSUpdate',
   },
-  
   {
     -- Autocompletion of brackets closing 
     'm4xshen/autoclose.nvim'
@@ -453,7 +453,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'html', 'htmldjango' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', "html", "htmldjango"},
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -562,28 +562,34 @@ local on_attach = function(_, bufnr)
 end
 
 -- document existing key chains
-require('which-key').register {
-  ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-  ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-  ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-  ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
-  ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-  ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-  ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-  ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+require('which-key').add {
+  {
+    mode = { "v" }
+  },
+  {
+    {"", group = '[C]ode'},
+    {"", group = '[D]ocument'},
+    {"", group = '[G]it'},
+    {"", group = 'Git [H]unk'},
+    {"", group = '[R]ename'},
+    {"", group = '[S]earch'},
+    {"", group = '[T]oggle'},
+    {"", group = '[W]orkspace'},
+    {"", desc="", hidden = true, mode = {"v","v","v","v","v","v","v","v"} },
+  }
 }
 -- register which-key VISUAL mode
 -- required for visual <leader>hs (hunk stage) to work
-require('which-key').register({
-  ['<leader>'] = { name = 'VISUAL <leader>' },
-  ['<leader>h'] = { 'Git [H]unk' },
-}, { mode = 'v' })
+require('which-key').add(  {
+    { "", group = "VISUAL <leader>", mode = "v" },
+    { "", desc = "<leader>h", mode = "v" },
+  })
 
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
 require('mason-lspconfig').setup({
-  ensure_installed = {"jinja_lsp", "pylsp", "jinja_lsp", "html", "htmldjango", "clangd"}
+  ensure_installed = {"pylsp", "pyright", "clangd", "html-lsp"},
 })
 
 -- Enable the following language servers
@@ -596,10 +602,10 @@ require('mason-lspconfig').setup({
 --  define the property 'filetypes' to the map in question.
 local servers = {
   -- gopls = {},
-  -- pyright = {filetypes = {'py'}},
+ pyright = {filetypes = {'py'}},
   -- rust_analyzer = {},
   -- tsserver = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  html = { filetypes = { 'html', 'twig', 'hbs'} },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -694,5 +700,64 @@ cmp.setup {
   },
 }
 
+require'nvim-web-devicons'.setup {
+ -- your personnal icons can go here (to override)
+ -- you can specify color or cterm_color instead of specifying both of them
+ -- DevIcon will be appended to `name`
+ override = {
+  zsh = {
+    icon = "",
+    color = "#428850",
+    cterm_color = "65",
+    name = "Zsh"
+  }
+ };
+ -- globally enable different highlight colors per icon (default to true)
+ -- if set to false all icons will have the default icon's color
+ color_icons = true;
+ -- globally enable default icons (default to false)
+ -- will get overriden by `get_icons` option
+ default = true;
+ -- globally enable "strict" selection of icons - icon will be looked up in
+ -- different tables, first by filename, and if not found by extension; this
+ -- prevents cases when file doesn't have any extension but still gets some icon
+ -- because its name happened to match some extension (default to false)
+ strict = true;
+ -- same as `override` but specifically for overrides by filename
+ -- takes effect when `strict` is true
+ override_by_filename = {
+  [".gitignore"] = {
+    icon = "",
+    color = "#f1502f",
+    name = "Gitignore"
+  }
+ };
+ -- same as `override` but specifically for overrides by extension
+ -- takes effect when `strict` is true
+ override_by_extension = {
+  ["log"] = {
+    icon = "",
+    color = "#81e043",
+    name = "Log"
+  }
+ };
+ -- same as `override` but specifically for operating system
+ -- takes effect when `strict` is true
+ override_by_operating_system = {
+  ["apple"] = {
+    icon = "",
+    color = "#A2AAAD",
+    cterm_color = "248",
+    name = "Apple",
+  },
+ };
+}
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+require'lspconfig'.html.setup{
+  cmd = { "vscode-html-language-server.cmd", "--stdio" },
+  capabilities = capabilities,
+}
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
